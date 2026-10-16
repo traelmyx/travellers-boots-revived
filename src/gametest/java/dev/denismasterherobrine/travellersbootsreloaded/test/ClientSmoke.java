@@ -115,7 +115,7 @@ public final class ClientSmoke {
             player.setItemSlot(EquipmentSlot.FEET, new ItemStack(TravellersBoots.BOOTS.get(4).get()));
             for (int i = 0; i < 4; i++) {
                 var stand = net.minecraft.world.entity.EntityType.ARMOR_STAND.create(level);
-                stand.moveTo(player.getX() - 3 + i * 2, player.getY(), player.getZ() + 3, player.getYRot() + 180, 0);
+                stand.moveTo(player.getX() + (i < 2 ? -3 - i * 1.5 : 3 + (i - 2) * 1.5), player.getY(), player.getZ(), player.getYRot(), 0);
                 stand.setItemSlot(EquipmentSlot.FEET, new ItemStack(TravellersBoots.BOOTS.get(i).get()));
                 level.addFreshEntity(stand);
             }
