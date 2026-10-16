@@ -1,0 +1,14 @@
+{
+	"schemaVersion": 1,
+	"id": "${id}_gametest",
+	"version": "${version}",
+	"name": "Traveller's Boots GameTests",
+	"environment": "*",
+	"entrypoints": {
+		"fabric-gametest": ["dev.denismasterherobrine.travellersbootsreloaded.test.fabric.FabricGameTests"],
+		"client": ["dev.denismasterherobrine.travellersbootsreloaded.test.fabric.FabricClientSmoke"]
+	},
+	"depends": {
+		"${id}": "*"
+	}
+}

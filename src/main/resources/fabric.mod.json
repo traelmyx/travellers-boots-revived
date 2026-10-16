@@ -1,0 +1,25 @@
+{
+	"schemaVersion": 1,
+	"id": "${id}",
+	"version": "${version}",
+	"name": "${name}",
+	"description": "Five pairs of boots that make you faster, jump higher and step up full blocks. Based on Traveller's Boots: Reloaded by DenisMasterHerobrine.",
+	"authors": ["traelmyx"],
+	"contributors": ["DenisMasterHerobrine (original mod)"],
+	"contact": {
+		"sources": "https://github.com/traelmyx/travellers-boots-revived",
+		"issues": "https://github.com/traelmyx/travellers-boots-revived/issues"
+	},
+	"license": "MIT",
+	"icon": "assets/travellersbootsreloaded/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": ["dev.denismasterherobrine.travellersbootsreloaded.fabric.TravellersBootsFabric"]
+	},
+	"depends": {
+		"fabricloader": ">=0.16.0",
+		"fabric-api": "*",
+		"minecraft": "${mc_dep}",
+		"java": ">=${java}"
+	}
+}
