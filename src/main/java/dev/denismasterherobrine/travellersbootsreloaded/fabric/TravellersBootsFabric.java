@@ -4,7 +4,11 @@ package dev.denismasterherobrine.travellersbootsreloaded.fabric;
 /*import dev.denismasterherobrine.travellersbootsreloaded.TravellersBoots;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+//? if >=26 {
+/^import net.fabricmc.fabric.api.creativetab.v1.FabricCreativeModeTab;
+^///?} else {
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+//?}
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -40,6 +44,9 @@ public class TravellersBootsFabric implements ModInitializer {
 		^///?} else {
 		Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, ResourceLocation.fromNamespaceAndPath(TravellersBoots.MOD_ID, "travellers_boots"),
 		//?}
+			//? if >=26 {
+			/^FabricCreativeModeTab.builder()
+			^///?} else
 			FabricItemGroup.builder()
 				.title(Component.translatable("travellersbootsreloaded.creative_tab"))
 				.icon(() -> TravellersBoots.BOOTS.get(4).get().getDefaultInstance())
