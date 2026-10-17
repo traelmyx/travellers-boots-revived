@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smithing_transform",
+  "template": "minecraft:netherite_upgrade_smithing_template",
+  "base": "travellersbootsreloaded:travellers_boots_tier4",
+  "addition": "minecraft:netherite_ingot",
+  "result": {
+    "id": "travellersbootsreloaded:travellers_boots_tier5",
+    "count": 1
+  }
+}

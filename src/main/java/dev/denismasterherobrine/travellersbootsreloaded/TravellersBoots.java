@@ -2,7 +2,20 @@ package dev.denismasterherobrine.travellersbootsreloaded;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
+//? if >=1.21.11 {
+/*import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.equipment.ArmorMaterial;
+import net.minecraft.world.item.equipment.ArmorType;
+import net.minecraft.world.item.equipment.EquipmentAssets;
+*///?} else {
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.crafting.Ingredient;
+//?}
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -12,12 +25,9 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.Ingredient;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -36,7 +46,11 @@ public final class TravellersBoots {
 
 	private static final int[] DEFENSE = {1, 2, 4, 6, 8};
 	private static final int[] DURABILITY = {16, 32, 64, 128, 256};
+	//? if >=1.21.11 {
+	/*private static final Identifier STEP_HEIGHT_ID = Identifier.fromNamespaceAndPath(MOD_ID, "step_height");
+	*///?} else {
 	private static final ResourceLocation STEP_HEIGHT_ID = ResourceLocation.fromNamespaceAndPath(MOD_ID, "step_height");
+	//?}
 
 	/** Filled by the loader entry point once the boots are registered, lowest tier first. */
 	public static final List<Supplier<Item>> BOOTS = new ArrayList<>();
@@ -67,15 +81,27 @@ public final class TravellersBoots {
 			case 3 -> Items.EMERALD_BLOCK;
 			default -> Items.NETHERITE_SCRAP;
 		};
+		//? if >=1.21.11 {
+		/*TagKey<Item> repairs = TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(MOD_ID, "repairs/tier" + (tier + 1)));
+		return new ArmorMaterial(DURABILITY[tier], java.util.Map.of(ArmorType.BOOTS, DEFENSE[tier]), 25, sound, 1.0F, 0.0F, repairs,
+			ResourceKey.create(EquipmentAssets.ROOT_ID, Identifier.fromNamespaceAndPath(MOD_ID, name(tier))));
+		*///?} else {
 		EnumMap<ArmorItem.Type, Integer> defense = new EnumMap<>(ArmorItem.Type.class);
 		for (ArmorItem.Type type : ArmorItem.Type.values()) defense.put(type, type == ArmorItem.Type.BOOTS ? DEFENSE[tier] : 0);
 		return new ArmorMaterial(defense, 25, sound, () -> Ingredient.of(repair),
 			List.of(new ArmorMaterial.Layer(ResourceLocation.fromNamespaceAndPath(MOD_ID, name(tier)))), 1.0F, 0.0F);
+		//?}
 	}
 
+	//? if >=1.21.11 {
+	/*public static Item boots(ResourceKey<Item> key, int tier) {
+		return new Item(new Item.Properties().humanoidArmor(material(tier), ArmorType.BOOTS).durability(DURABILITY[tier]).setId(key));
+	}
+	*///?} else {
 	public static Item boots(Holder<ArmorMaterial> material, int tier) {
 		return new ArmorItem(material, ArmorItem.Type.BOOTS, new Item.Properties().durability(DURABILITY[tier]));
 	}
+	//?}
 
 	/** 1 to 5 for the boots on the player's feet, 0 for none. */
 	public static int tier(Player player) {
@@ -98,8 +124,13 @@ public final class TravellersBoots {
 			}
 		}
 		if (tier > 0 && !player.level().isClientSide()) {
+			//? if >=1.21.5 {
+			/*player.addEffect(new MobEffectInstance(MobEffects.SPEED, 20, SPEED[tier - 1]));
+			player.addEffect(new MobEffectInstance(MobEffects.JUMP_BOOST, 20, JUMP[tier - 1]));
+			*///?} else {
 			player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 20, SPEED[tier - 1]));
 			player.addEffect(new MobEffectInstance(MobEffects.JUMP, 20, JUMP[tier - 1]));
+			//?}
 		}
 	}
 

@@ -2,7 +2,13 @@ package dev.denismasterherobrine.travellersbootsreloaded.test;
 
 import dev.denismasterherobrine.travellersbootsreloaded.TravellersBoots;
 import net.minecraft.gametest.framework.GameTestHelper;
+//? if >=1.21.11 {
+/*import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+*///?} else {
 import net.minecraft.resources.ResourceLocation;
+//?}
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -19,6 +25,24 @@ public final class BootsTests {
 	private BootsTests() {
 	}
 
+	//? if >=1.21.11 {
+	/*private static final net.minecraft.core.Holder<net.minecraft.world.effect.MobEffect> SPEED = MobEffects.SPEED, JUMP = MobEffects.JUMP_BOOST;
+	*///?} else {
+	private static final net.minecraft.core.Holder<net.minecraft.world.effect.MobEffect> SPEED = MobEffects.MOVEMENT_SPEED, JUMP = MobEffects.JUMP;
+	//?}
+
+	private static int defense(ItemStack stack) {
+		//? if >=1.21.11 {
+		/*double armor = 0;
+		for (var entry : stack.getOrDefault(net.minecraft.core.component.DataComponents.ATTRIBUTE_MODIFIERS, net.minecraft.world.item.component.ItemAttributeModifiers.EMPTY).modifiers()) {
+			if (entry.attribute().equals(Attributes.ARMOR)) armor += entry.modifier().amount();
+		}
+		return (int) armor;
+		*///?} else {
+		return ((net.minecraft.world.item.ArmorItem) stack.getItem()).getDefense();
+		//?}
+	}
+
 	private static ItemStack boots(int tier) {
 		return new ItemStack(TravellersBoots.BOOTS.get(tier - 1).get());
 	}
@@ -30,15 +54,15 @@ public final class BootsTests {
 			player.removeAllEffects();
 			player.setItemSlot(EquipmentSlot.FEET, boots(tier));
 			TravellersBoots.tick(player);
-			var speed = player.getEffect(MobEffects.MOVEMENT_SPEED);
+			var speed = player.getEffect(SPEED);
 			helper.assertTrue(speed != null && speed.getAmplifier() == TravellersBoots.SPEED[tier - 1], "MK" + tier + " speed: " + speed);
-			var jump = player.getEffect(MobEffects.JUMP);
+			var jump = player.getEffect(JUMP);
 			helper.assertTrue(jump != null && jump.getAmplifier() == TravellersBoots.JUMP[tier - 1], "MK" + tier + " jump: " + jump);
 		}
 		player.removeAllEffects();
 		player.setItemSlot(EquipmentSlot.FEET, new ItemStack(Items.LEATHER_BOOTS));
 		TravellersBoots.tick(player);
-		helper.assertTrue(player.getEffect(MobEffects.MOVEMENT_SPEED) == null, "plain boots gave speed");
+		helper.assertTrue(player.getEffect(SPEED) == null, "plain boots gave speed");
 		helper.succeed();
 	}
 
@@ -63,10 +87,18 @@ public final class BootsTests {
 
 	/** All five recipes load and MK1 crafts from leather boots. */
 	public static void recipes(GameTestHelper helper) {
+		//? if >=1.21.11 {
+		/*var manager = helper.getLevel().recipeAccess();
+		*///?} else {
 		var manager = helper.getLevel().getRecipeManager();
+		//?}
 		List<String> missing = new ArrayList<>();
 		for (int tier = 1; tier <= TravellersBoots.TIERS; tier++) {
+			//? if >=1.21.11 {
+			/*ResourceKey<net.minecraft.world.item.crafting.Recipe<?>> id = ResourceKey.create(Registries.RECIPE, Identifier.fromNamespaceAndPath(TravellersBoots.MOD_ID, TravellersBoots.name(tier - 1)));
+			*///?} else {
 			ResourceLocation id = ResourceLocation.fromNamespaceAndPath(TravellersBoots.MOD_ID, TravellersBoots.name(tier - 1));
+			//?}
 			if (manager.byKey(id).isEmpty()) missing.add(id.toString());
 		}
 		helper.assertTrue(missing.isEmpty(), "missing recipes: " + missing);
@@ -74,7 +106,11 @@ public final class BootsTests {
 			new ItemStack(Items.STRING), new ItemStack(Items.LEATHER_BOOTS), new ItemStack(Items.STRING),
 			new ItemStack(Items.LEATHER), new ItemStack(Items.FEATHER), new ItemStack(Items.LEATHER)));
 		var result = manager.getRecipeFor(RecipeType.CRAFTING, input, helper.getLevel())
+			//? if >=26 {
+			/*.map(r -> r.value().assemble(input)).orElse(ItemStack.EMPTY);
+			*///?} else {
 			.map(r -> r.value().assemble(input, helper.getLevel().registryAccess())).orElse(ItemStack.EMPTY);
+			//?}
 		helper.assertTrue(result.is(TravellersBoots.BOOTS.get(0).get()), "MK1 recipe gave " + result);
 		helper.succeed();
 	}
@@ -83,7 +119,7 @@ public final class BootsTests {
 	public static void armorValues(GameTestHelper helper) {
 		int last = -1;
 		for (int tier = 1; tier <= TravellersBoots.TIERS; tier++) {
-			int armor = ((net.minecraft.world.item.ArmorItem) TravellersBoots.BOOTS.get(tier - 1).get()).getDefense();
+			int armor = defense(boots(tier));
 			helper.assertTrue(armor > last, "MK" + tier + " armor " + armor + " not above " + last);
 			last = armor;
 		}

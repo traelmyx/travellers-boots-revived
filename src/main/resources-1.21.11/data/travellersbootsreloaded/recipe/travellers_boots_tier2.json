@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "GTG",
+    "BLB"
+  ],
+  "key": {
+    "G": "minecraft:yellow_carpet",
+    "B": "minecraft:gold_block",
+    "L": "minecraft:leather",
+    "T": "travellersbootsreloaded:travellers_boots_tier1"
+  },
+  "result": {
+    "id": "travellersbootsreloaded:travellers_boots_tier2",
+    "count": 1
+  },
+  "category": "equipment"
+}

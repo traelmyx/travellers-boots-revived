@@ -20,6 +20,9 @@ configurations {
 	gametestRuntimeOnly.extendsFrom runtimeOnly
 }
 
+// Version-specific resources: recipe ingredient syntax, item model definitions, equipment assets (1.21.2+)
+sourceSets.main.resources.srcDir rootProject.file(stonecutter.eval(stonecutter.current.version, '>=1.21.11') ? 'src/main/resources-1.21.11' : 'src/main/resources-1.21.1')
+
 neoForge {
 	enable {
 		version = project.property('deps.neoforge')

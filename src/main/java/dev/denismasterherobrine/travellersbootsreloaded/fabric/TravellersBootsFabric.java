@@ -6,12 +6,18 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+//? if >=1.21.11 {
+/^import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+^///?} else {
+import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ArmorMaterial;
+//?}
 import net.minecraft.world.item.Item;
 
 public class TravellersBootsFabric implements ModInitializer {
@@ -19,12 +25,21 @@ public class TravellersBootsFabric implements ModInitializer {
 	public void onInitialize() {
 		TravellersBoots.loadConfig(FabricLoader.getInstance().getConfigDir());
 		for (int i = 0; i < TravellersBoots.TIERS; i++) {
+			//? if >=1.21.11 {
+			/^ResourceKey<Item> key = ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(TravellersBoots.MOD_ID, TravellersBoots.name(i)));
+			Item boots = Registry.register(BuiltInRegistries.ITEM, key, TravellersBoots.boots(key, i));
+			^///?} else {
 			ResourceLocation id = ResourceLocation.fromNamespaceAndPath(TravellersBoots.MOD_ID, TravellersBoots.name(i));
 			Holder<ArmorMaterial> material = Registry.registerForHolder(BuiltInRegistries.ARMOR_MATERIAL, id, TravellersBoots.material(i));
 			Item boots = Registry.register(BuiltInRegistries.ITEM, id, TravellersBoots.boots(material, i));
+			//?}
 			TravellersBoots.BOOTS.add(() -> boots);
 		}
+		//? if >=1.21.11 {
+		/^Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, Identifier.fromNamespaceAndPath(TravellersBoots.MOD_ID, "travellers_boots"),
+		^///?} else {
 		Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, ResourceLocation.fromNamespaceAndPath(TravellersBoots.MOD_ID, "travellers_boots"),
+		//?}
 			FabricItemGroup.builder()
 				.title(Component.translatable("travellersbootsreloaded.creative_tab"))
 				.icon(() -> TravellersBoots.BOOTS.get(4).get().getDefaultInstance())
